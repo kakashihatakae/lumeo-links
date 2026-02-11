@@ -27,6 +27,7 @@ export function LoginForm({
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
+    console.log("==========")
     e.preventDefault();
     const supabase = createClient();
     setIsLoading(true);
@@ -39,7 +40,7 @@ export function LoginForm({
       });
       if (error) throw error;
       // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      router.push("/dashboard");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

@@ -4,57 +4,116 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
+    /* 
+     * Design System: "Stone & Violet"
+     * A sophisticated, warm-neutral palette with violet accents
+     * Perfect for influencers - elegant, modern, not tacky
+     */
+    
+    /* Base colors - warm stone for that premium feel */
+    --background: 30 6% 97%;
+    --foreground: 20 14% 10%;
+    
+    /* Card - clean, elevated surfaces */
+    --card: 30 6% 99%;
+    --card-foreground: 20 14% 10%;
+    
+    /* Popover - subtle overlay surfaces */
+    --popover: 30 6% 99%;
+    --popover-foreground: 20 14% 10%;
+    
+    /* Primary - sophisticated violet, not too bright */
+    --primary: 262 56% 58%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - warm stone for secondary actions */
+    --secondary: 30 6% 92%;
+    --secondary-foreground: 20 14% 15%;
+    
+    /* Muted - subtle, accessible */
+    --muted: 30 6% 92%;
+    --muted-foreground: 20 6% 45%;
+    
+    /* Accent - soft violet tint for highlights */
+    --accent: 262 50% 96%;
+    --accent-foreground: 262 56% 35%;
+    
+    /* Destructive - soft red */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Border - subtle definition */
+    --border: 30 6% 88%;
+    --input: 30 6% 88%;
+    --ring: 262 56% 58%;
+    
+    /* Chart colors - cohesive with violet theme */
+    --chart-1: 262 56% 58%;
+    --chart-2: 180 55% 45%;
     --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
+    --chart-4: 280 65% 55%;
     --chart-5: 340 75% 55%;
+    
+    /* Radius - consistent rounding */
+    --radius: 0.75rem;
+    
+    /* Sidebar specific - if needed */
+    --sidebar-background: 30 6% 97%;
+    --sidebar-foreground: 20 14% 10%;
+    --sidebar-primary: 262 56% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 262 50% 96%;
+    --sidebar-accent-foreground: 262 56% 35%;
+    --sidebar-border: 30 6% 88%;
+    --sidebar-ring: 262 56% 58%;
+  }
+  
+  .dark {
+    /* Dark mode - deep charcoal with violet glow */
+    --background: 20 6% 8%;
+    --foreground: 30 6% 95%;
+    
+    --card: 20 6% 10%;
+    --card-foreground: 30 6% 95%;
+    
+    --popover: 20 6% 10%;
+    --popover-foreground: 30 6% 95%;
+    
+    /* Primary - slightly brighter in dark for visibility */
+    --primary: 262 60% 65%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 20 6% 16%;
+    --secondary-foreground: 30 6% 95%;
+    
+    --muted: 20 6% 16%;
+    --muted-foreground: 20 6% 60%;
+    
+    /* Accent - deeper violet in dark */
+    --accent: 262 30% 18%;
+    --accent-foreground: 262 60% 75%;
+    
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 20 6% 18%;
+    --input: 20 6% 18%;
+    --ring: 262 60% 65%;
+    
+    --chart-1: 262 60% 65%;
+    --chart-2: 180 55% 50%;
+    --chart-3: 30 80% 60%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 60%;
+    
+    --sidebar-background: 20 6% 8%;
+    --sidebar-foreground: 30 6% 95%;
+    --sidebar-primary: 262 60% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 262 30% 18%;
+    --sidebar-accent-foreground: 262 60% 75%;
+    --sidebar-border: 20 6% 18%;
+    --sidebar-ring: 262 60% 65%;
   }
 }
 
@@ -64,5 +123,42 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utility classes for linktree */
+@layer utilities {
+  /* Gradient backgrounds for link cards */
+  .link-gradient-1 {
+    background: linear-gradient(135deg, hsl(262 56% 58%) 0%, hsl(280 60% 55%) 100%);
+  }
+  
+  .link-gradient-2 {
+    background: linear-gradient(135deg, hsl(340 75% 55%) 0%, hsl(0 72% 51%) 100%);
+  }
+  
+  .link-gradient-3 {
+    background: linear-gradient(135deg, hsl(180 55% 45%) 0%, hsl(200 60% 50%) 100%);
+  }
+  
+  .link-gradient-4 {
+    background: linear-gradient(135deg, hsl(30 80% 55%) 0%, hsl(45 90% 55%) 100%);
+  }
+  
+  /* Subtle pattern backgrounds */
+  .bg-pattern-dots {
+    background-image: radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  
+  /* Smooth transitions for interactive elements */
+  .transition-link {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .transition-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -5px rgba(0, 0, 0, 0.04);
   }
 }
