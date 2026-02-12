@@ -40,7 +40,6 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log("---------------->");
   const supabase = await createClient();
   const { data: { user }, error } = await supabase.auth.getUser();
 
@@ -67,7 +66,7 @@ export default async function AppLayout({
           </div>
 
           <div className="flex items-center gap-3">
-            <ThemeSwitcher />
+            {/* <ThemeSwitcher /> */}
 
             {profile && (
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex">

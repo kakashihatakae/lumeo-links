@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
@@ -21,8 +20,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ShoppingBag, Link2, ExternalLink } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  ShoppingBag,
+  Link2,
+  ExternalLink,
+  Instagram,
+  Twitter,
+  Youtube,
+  Github,
+  Linkedin,
+  Facebook,
+  Twitch,
+  Globe,
+  Music,
+  Smartphone,
+  ShoppingCart,
+  MessageCircle,
+  Video,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LinkEditorProps {
@@ -40,8 +56,28 @@ const gradientOptions = [
   { value: "gradient-4", label: "Amber", class: "link-gradient-4" },
 ];
 
+const linkTypeOptions = [
+  { value: "website", label: "Website", icon: Globe },
+  { value: "instagram", label: "Instagram", icon: Instagram },
+  // { value: "twitter", label: "Twitter", icon: Twitter },
+  { value: "x", label: "X (Twitter)", icon: Twitter },
+  { value: "youtube", label: "YouTube", icon: Youtube },
+  { value: "tiktok", label: "TikTok", icon: Video },
+  { value: "linkedin", label: "LinkedIn", icon: Linkedin },
+  { value: "github", label: "GitHub", icon: Github },
+  { value: "facebook", label: "Facebook", icon: Facebook },
+  { value: "twitch", label: "Twitch", icon: Twitch },
+  { value: "discord", label: "Discord", icon: MessageCircle },
+  { value: "spotify", label: "Spotify", icon: Music },
+  // { value: "apple", label: "Apple", icon: Smartphone },
+  // { value: "google", label: "Google", icon: Globe },
+  // { value: "amazon", label: "Amazon", icon: ShoppingCart },
+  { value: "other", label: "Other", icon: Link2 },
+];
+
 export function LinkEditor({ link, isOpen, onClose, onSave }: LinkEditorProps) {
-  const [formData, setFormData] = useState<Partial<Link>>({
+  const isEditing = !!link?.id;
+  const [formData, setFormData] = useState<Partial<Link>>(isEditing ? {...link} : {
     title: "",
     url: "",
     type: "link",
@@ -49,11 +85,13 @@ export function LinkEditor({ link, isOpen, onClose, onSave }: LinkEditorProps) {
     currency: "USD",
     gradient_style: "none",
     is_active: true,
-    ...link,
   });
 
-  const isEditing = !!link?.id;
   const isProduct = formData.type === "product";
+  const selectedLinkType =
+    linkTypeOptions.find((o) => o.value === formData.link_type) ||
+    linkTypeOptions[0];
+  const SelectedIcon = selectedLinkType.icon;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,13 +103,13 @@ export function LinkEditor({ link, isOpen, onClose, onSave }: LinkEditorProps) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const title = isEditing ? `Edit new ${formData.type}` : `Add new ${formData.type}`
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Edit Link" : "Add New Link"}
-          </DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -82,16 +120,62 @@ export function LinkEditor({ link, isOpen, onClose, onSave }: LinkEditorProps) {
             className="w-full"
           >
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="link" className="flex items-center gap-2">
+              <TabsTrigger
+                value="link"
+                className="flex items-center gap-2"
+                disabled={isEditing && formData.type != "link"}
+              >
                 <Link2 size={16} />
                 Link
               </TabsTrigger>
-              <TabsTrigger value="product" className="flex items-center gap-2">
+              <TabsTrigger
+                value="product"
+                className="flex items-center gap-2"
+                disabled={isEditing && formData.type != "product"}
+              >
                 <ShoppingBag size={16} />
                 Product
               </TabsTrigger>
             </TabsList>
           </Tabs>
+
+          {/* Link Type Selection */}
+          {formData.type === "link" && (
+            <div className="space-y-2">
+              <Label>Link Type</Label>
+              <Select
+                value={formData.link_type || "website"}
+                onValueChange={(v) =>
+                  handleChange("link_type", v as Link["link_type"])
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue>
+                    <div className="flex items-center gap-2">
+                      <SelectedIcon className="w-4 h-4" />
+                      {selectedLinkType.label}
+                    </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="max-h-64">
+                  {linkTypeOptions.map((option) => {
+                    const Icon = option.icon;
+                    return (
+                      <SelectItem key={option.value} value={option.value}>
+                        <div className="flex items-center gap-2">
+                          <Icon className="w-4 h-4" />
+                          {option.label}
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                This determines which icon appears on your page
+              </p>
+            </div>
+          )}
 
           {/* Title */}
           <div className="space-y-2">
@@ -156,7 +240,10 @@ export function LinkEditor({ link, isOpen, onClose, onSave }: LinkEditorProps) {
                   placeholder="29.99"
                   value={formData.price || ""}
                   onChange={(e) =>
-                    handleChange("price", e.target.value ? parseFloat(e.target.value) : null)
+                    handleChange(
+                      "price",
+                      e.target.value ? parseFloat(e.target.value) : null,
+                    )
                   }
                   className="flex-1"
                 />
@@ -178,14 +265,17 @@ export function LinkEditor({ link, isOpen, onClose, onSave }: LinkEditorProps) {
                     option.class || "bg-secondary",
                     formData.gradient_style === option.value
                       ? "border-primary ring-2 ring-primary/20"
-                      : "border-transparent hover:border-border"
+                      : "border-transparent hover:border-border",
                   )}
                   title={option.label}
                 />
               ))}
             </div>
             <p className="text-xs text-muted-foreground">
-              {gradientOptions.find((o) => o.value === formData.gradient_style)?.label}
+              {
+                gradientOptions.find((o) => o.value === formData.gradient_style)
+                  ?.label
+              }
             </p>
           </div>
 

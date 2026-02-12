@@ -18,7 +18,12 @@ import {
   Linkedin,
   Facebook,
   Twitch,
-  Globe
+  Globe,
+  Music,
+  Smartphone,
+  ShoppingCart,
+  MessageCircle,
+  Video
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -37,6 +42,26 @@ const socialIcons: Record<string, React.ComponentType<{ className?: string }>> =
   facebook: Facebook,
   twitch: Twitch,
   website: Globe,
+};
+
+// Map link types to their icons
+const linkTypeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  website: Globe,
+  instagram: Instagram,
+  twitter: Twitter,
+  x: Twitter,
+  youtube: Youtube,
+  tiktok: Video,
+  linkedin: Linkedin,
+  github: Github,
+  facebook: Facebook,
+  twitch: Twitch,
+  discord: MessageCircle,
+  spotify: Music,
+  apple: Smartphone,
+  google: Globe,
+  amazon: ShoppingCart,
+  other: Link2,
 };
 
 const gradientStyles = {
@@ -202,7 +227,10 @@ async function ProfileContent({ username }: { username: string }) {
             </div>
           ) : (
             links.map((link) => {
-              const IconComponent = link.type === "product" ? ShoppingBag : Link2;
+              // Get the appropriate icon based on link_type or fall back to type-based icon
+              const IconComponent = link.type === "product" 
+                ? ShoppingBag 
+                : linkTypeIcons[link.link_type || "website"] || Link2;
               
               return (
                 <a

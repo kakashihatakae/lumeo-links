@@ -61,7 +61,7 @@ export interface Database {
           currency: string | null
           image_url: string | null
           gradient_style: 'none' | 'gradient-1' | 'gradient-2' | 'gradient-3' | 'gradient-4'
-          icon: string | null
+          link_type: 'website' | 'instagram' | 'twitter' | 'x' | 'youtube' | 'tiktok' | 'linkedin' | 'github' | 'facebook' | 'twitch' | 'discord' | 'spotify' | 'apple' | 'google' | 'amazon' | 'other' | null
           position: number
           is_active: boolean
           clicks: number

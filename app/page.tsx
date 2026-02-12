@@ -16,7 +16,9 @@ import {
 export default async function HomePage() {
   // Check if user is logged in
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // If logged in, redirect to dashboard
   if (user) {
@@ -25,29 +27,30 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <Layout className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-semibold text-lg">TinyLink</span>
-          </Link>
-
-          <div className="flex items-center gap-4">
-            <Link
-              href="/auth/login"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Log in
+      <div>
+        <header className="sticky top-0 z-50 w-full flex justify-center border-b bg-background/95 backdrop-blur">
+          <div className="container flex h-14 items-center justify-between">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <Layout className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-semibold text-lg">TinyLink</span>
             </Link>
-            <Button asChild size="sm">
-              <Link href="/auth/sign-up">Get Started</Link>
-            </Button>
+
+            <div className="flex items-center gap-4">
+              <Link
+                href="/auth/login"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Log in
+              </Link>
+              <Button asChild size="sm">
+                <Link href="/auth/sign-up">Get Started</Link>
+              </Button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       {/* Hero Section */}
       <section className="flex-1 flex flex-col items-center justify-center py-20 px-4">
@@ -59,13 +62,12 @@ export default async function HomePage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6">
-            One link for{" "}
-            <span className="text-primary">everything</span>
+            One link for <span className="text-primary">everything</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Create a beautiful page to showcase your links, products, and social profiles. 
-            Perfect for influencers, creators, and businesses.
+            Create a beautiful page to showcase your links, products, and social
+            profiles. Perfect for influencers, creators, and businesses.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -75,7 +77,12 @@ export default async function HomePage() {
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" asChild className="w-full sm:w-auto">
+            <Button
+              variant="outline"
+              size="lg"
+              asChild
+              className="w-full sm:w-auto"
+            >
               <Link href="/demo">See example</Link>
             </Button>
           </div>
@@ -156,7 +163,9 @@ export default async function HomePage() {
               <h3 className="text-lg font-semibold mb-2">Free</h3>
               <div className="text-3xl font-bold mb-6">
                 $0
-                <span className="text-base font-normal text-muted-foreground">/month</span>
+                <span className="text-base font-normal text-muted-foreground">
+                  /month
+                </span>
               </div>
               <ul className="space-y-3 mb-6">
                 {[
@@ -186,7 +195,9 @@ export default async function HomePage() {
               <h3 className="text-lg font-semibold mb-2">Pro</h3>
               <div className="text-3xl font-bold mb-6">
                 $9
-                <span className="text-base font-normal text-muted-foreground">/month</span>
+                <span className="text-base font-normal text-muted-foreground">
+                  /month
+                </span>
               </div>
               <ul className="space-y-3 mb-6">
                 {[

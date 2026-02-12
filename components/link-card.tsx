@@ -10,6 +10,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   ExternalLink,
   ShoppingBag,
@@ -17,14 +19,26 @@ import {
   GripVertical,
   Edit,
   Trash2,
-  Eye,
-  EyeOff,
+  Instagram,
+  Twitter,
+  Youtube,
+  Github,
+  Linkedin,
+  Facebook,
+  Twitch,
+  Globe,
+  Music,
+  Smartphone,
+  ShoppingCart,
+  MessageCircle,
+  Video,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LinkCardProps {
   link: Link;
   isEditing?: boolean;
+  sortable?: boolean;
   onEdit?: (link: Link) => void;
   onDelete?: (id: string) => void;
   onToggleActive?: (id: string, isActive: boolean) => void;
@@ -39,25 +53,70 @@ const gradientStyles = {
   "gradient-4": "link-gradient-4 text-white border-0",
 };
 
+// Map link types to their icons
+const linkTypeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  website: Globe,
+  instagram: Instagram,
+  twitter: Twitter,
+  x: Twitter,
+  youtube: Youtube,
+  tiktok: Video,
+  linkedin: Linkedin,
+  github: Github,
+  facebook: Facebook,
+  twitch: Twitch,
+  discord: MessageCircle,
+  spotify: Music,
+  apple: Smartphone,
+  google: Globe,
+  amazon: ShoppingCart,
+  other: Link2,
+};
+
 export function LinkCard({
   link,
   isEditing = false,
+  sortable = false,
   onEdit,
   onDelete,
   onToggleActive,
   onClick,
 }: LinkCardProps) {
-  const IconComponent = link.type === "product" ? ShoppingBag : Link2;
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: link.id, disabled: !sortable });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  // Get the appropriate icon based on link_type or fall back to type-based icon
+  const IconComponent = link.type === "product" 
+    ? ShoppingBag 
+    : linkTypeIcons[link.link_type || "website"] || Link2;
 
   if (isEditing) {
     return (
       <Card
+        ref={setNodeRef}
+        style={style}
         className={cn(
           "p-4 flex items-center gap-3 transition-all duration-200",
-          !link.is_active && "opacity-60"
+          !link.is_active && "opacity-60",
+          isDragging && "opacity-50 shadow-lg ring-2 ring-primary/20 z-50"
         )}
       >
-        <div className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground transition-colors">
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground transition-colors p-1 -ml-1"
+        >
           <GripVertical size={20} />
         </div>
 

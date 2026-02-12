@@ -7,8 +7,16 @@ import {
   Twitter,
   Youtube,
   Github,
+  Linkedin,
+  Facebook,
+  Twitch,
+  Globe,
+  Music,
+  Smartphone,
+  ShoppingCart,
+  MessageCircle,
+  Video,
   ArrowRight,
-  Layout
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -28,6 +36,7 @@ interface DemoLink {
   title: string;
   url: string;
   type: "link" | "product";
+  link_type: string;
   price: number | null;
   gradient_style: "none" | "gradient-1" | "gradient-2" | "gradient-3" | "gradient-4";
   is_active: boolean;
@@ -39,6 +48,7 @@ const demoLinks: DemoLink[] = [
     title: "My Portfolio",
     url: "https://example.com/portfolio",
     type: "link",
+    link_type: "website",
     price: null,
     gradient_style: "gradient-1",
     is_active: true,
@@ -48,24 +58,37 @@ const demoLinks: DemoLink[] = [
     title: "Design Course",
     url: "https://example.com/course",
     type: "product",
+    link_type: "other",
     price: 49.99,
     gradient_style: "gradient-2",
     is_active: true,
   },
   {
     id: "3",
-    title: "Free Templates",
-    url: "https://example.com/templates",
+    title: "Instagram",
+    url: "https://instagram.com/alexdesigns",
     type: "link",
+    link_type: "instagram",
     price: null,
     gradient_style: "none",
     is_active: true,
   },
   {
     id: "4",
+    title: "YouTube Channel",
+    url: "https://youtube.com/alexdesigns",
+    type: "link",
+    link_type: "youtube",
+    price: null,
+    gradient_style: "none",
+    is_active: true,
+  },
+  {
+    id: "5",
     title: "Merchandise",
     url: "https://example.com/merch",
     type: "product",
+    link_type: "other",
     price: 24.99,
     gradient_style: "gradient-4",
     is_active: true,
@@ -83,6 +106,26 @@ const socialIcons: Record<string, React.ComponentType<{ className?: string }>> =
   twitter: Twitter,
   youtube: Youtube,
   github: Github,
+};
+
+// Map link types to their icons
+const linkTypeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  website: Globe,
+  instagram: Instagram,
+  twitter: Twitter,
+  x: Twitter,
+  youtube: Youtube,
+  tiktok: Video,
+  linkedin: Linkedin,
+  github: Github,
+  facebook: Facebook,
+  twitch: Twitch,
+  discord: MessageCircle,
+  spotify: Music,
+  apple: Smartphone,
+  google: Globe,
+  amazon: ShoppingCart,
+  other: Link2,
 };
 
 const gradientStyles = {
@@ -160,7 +203,10 @@ export default function DemoPage() {
         {/* Links */}
         <div className="space-y-4">
           {demoLinks.map((link) => {
-            const IconComponent = link.type === "product" ? ShoppingBag : Link2;
+            // Get the appropriate icon based on link_type or fall back to type-based icon
+            const IconComponent = link.type === "product" 
+              ? ShoppingBag 
+              : linkTypeIcons[link.link_type] || Link2;
             
             return (
               <a

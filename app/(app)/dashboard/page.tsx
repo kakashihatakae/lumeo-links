@@ -5,16 +5,29 @@ import { createClient } from "@/lib/supabase/client";
 import { Profile, Link } from "@/lib/database.types";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LinkCard } from "@/components/link-card";
 import { LinkEditor } from "@/components/link-editor";
 import { ProfileEditor } from "@/components/profile-editor";
 import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import {
   Plus,
   Settings,
   ExternalLink,
-  Loader2,
   AlertCircle,
 } from "lucide-react";
 
@@ -28,6 +41,13 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
 
   const supabase = createClient();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const fetchData = useCallback(async () => {
     try {
@@ -91,6 +111,42 @@ export default function DashboardPage() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setLinks((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        const newLinks = arrayMove(items, oldIndex, newIndex);
+        
+        // Update positions in database
+        updateLinkPositions(newLinks);
+        
+        return newLinks;
+      });
+    }
+  };
+
+  const updateLinkPositions = async (newLinks: Link[]) => {
+    try {
+      // Update each link's position
+      const updates = newLinks.map((link, index) => ({
+        id: link.id,
+        position: index,
+      }));
+
+      for (const update of updates) {
+        await supabase
+          .from("links")
+          .update({ position: update.position })
+          .eq("id", update.id);
+      }
+    } catch (err) {
+      console.error("Error updating positions:", err);
+    }
+  };
 
   const handleAddLink = () => {
     setEditingLink(null);
@@ -193,12 +249,14 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="container max-w-3xl py-8">
-        <div className="space-y-6">
-          <Skeleton className="h-32 w-full" />
-          <Skeleton className="h-16 w-full" />
-          <Skeleton className="h-16 w-full" />
-          <Skeleton className="h-16 w-full" />
+      <div className="flex justify-center">
+        <div className="w-4/5 py-8">
+          <div className="space-y-6">
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+          </div>
         </div>
       </div>
     );
@@ -206,13 +264,15 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="container max-w-3xl py-8">
-        <Card className="p-8 text-center">
-          <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
-          <h2 className="text-lg font-semibold mb-2">Something went wrong</h2>
-          <p className="text-muted-foreground mb-4">{error}</p>
-          <Button onClick={fetchData}>Try Again</Button>
-        </Card>
+      <div className="flex justify-center">
+        <div className="w-4/5 py-8">
+          <Card className="p-8 text-center">
+            <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
+            <h2 className="text-lg font-semibold mb-2">Something went wrong</h2>
+            <p className="text-muted-foreground mb-4">{error}</p>
+            <Button onClick={fetchData}>Try Again</Button>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -229,7 +289,7 @@ export default function DashboardPage() {
               </h1>
               <p className="text-muted-foreground mt-1">@{profile?.username}</p>
               {profile?.bio && (
-                <p className="mt-3 text-sm max-w-md">{profile.bio}</p>
+                <p className="mt-3 text-sm max-w-md">{profile?.bio}</p>
               )}
               <div className="flex items-center gap-2 mt-4">
                 <Button
@@ -281,18 +341,30 @@ export default function DashboardPage() {
               </Button>
             </Card>
           ) : (
-            <div className="space-y-3">
-              {links.map((link) => (
-                <LinkCard
-                  key={link.id}
-                  link={link}
-                  isEditing
-                  onEdit={handleEditLink}
-                  onDelete={handleDeleteLink}
-                  onToggleActive={handleToggleActive}
-                />
-              ))}
-            </div>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={links.map((l) => l.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="space-y-3">
+                  {links.map((link) => (
+                    <LinkCard
+                      key={link.id}
+                      link={link}
+                      isEditing
+                      sortable
+                      onEdit={handleEditLink}
+                      onDelete={handleDeleteLink}
+                      onToggleActive={handleToggleActive}
+                    />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           )}
         </div>
 

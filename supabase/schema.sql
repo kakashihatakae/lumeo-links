@@ -30,7 +30,7 @@ CREATE TABLE links (
     currency TEXT DEFAULT 'USD',
     image_url TEXT,
     gradient_style TEXT DEFAULT 'none' CHECK (gradient_style IN ('none', 'gradient-1', 'gradient-2', 'gradient-3', 'gradient-4')),
-    icon TEXT,
+    link_type TEXT DEFAULT 'website' CHECK (link_type IN ('website', 'instagram', 'twitter', 'x', 'youtube', 'tiktok', 'linkedin', 'github', 'facebook', 'twitch', 'discord', 'spotify', 'apple', 'google', 'amazon', 'other')),
     position INTEGER DEFAULT 0,
     is_active BOOLEAN DEFAULT true,
     clicks INTEGER DEFAULT 0,
